@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: thanos-file-sd
+  namespace: monitoring
+data:
+  sd-file.json: |-
+    [
+        {
+            "targets": [
+                "receiver-store-1.monitoring.svc.cluster.local:10907",
+                "receiver-store-2.monitoring.svc.cluster.local:10907",
+                "storegateway.monitoring.svc.cluster.local:10901"
+            ]
+        }
+    ]

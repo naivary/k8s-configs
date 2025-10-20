@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cilium-hubble
+  namespace: monitoring
+  labels:
+    serviceMonitorSelector: prometheus
+spec:
+  selector:
+    matchLabels:
+      k8s-app: hubble
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  endpoints:
+  - port: hubble-metrics
+    scheme: http
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    path: /metrics

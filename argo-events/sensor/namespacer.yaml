@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: namespacer
+  namespace: argo-events
+spec:
+  eventBusName: "jetstream"
+  template:
+    serviceAccountName: namespacer
+  dependencies:
+    - name: namespacer 
+      eventSourceName: namespacer
+      eventName: namespace-creation
+  triggers:
+    - template:
+        name: netpol-deny-all-ingress
+        k8s:
+          operation: create
+          parameters:
+            - src:
+                dependencyName: namespacer
+                dataKey: body.metadata.name
+              dest: metadata.namespace
+              operation: overwrite
+          source:
+            resource:
+              apiVersion: networking.k8s.io/v1
+              kind: NetworkPolicy
+              metadata:
+                name: ingress-guard
+                namespace: "" # dynamically determined from the event payload
+              spec:
+                podSelector: {}
+                policyTypes:
+                - Ingress

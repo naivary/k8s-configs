@@ -1,0 +1,41 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-k8s.gisa.io.owner
+spec:
+  rules:
+  - name: 'k8s.gisa.io:owner requirement'
+    match:
+      any:
+      - resources:
+          kinds:
+          - AppProject
+          operations:
+          - CREATE
+          - DELETE
+          - UPDATE
+    validate:
+      failureAction: Enforce
+      message: "k8s.gisa.io/owner requirement"
+      deny:
+        conditions:
+          any:
+            # UPDATE not allowed if object is owned by gisa 
+          - key: '{{ request.oldObject.metadata.labels."k8s.gisa.io/owner" }}'
+            operator: AnyIn
+            value:
+              - "gisa"
+            message: 'You are not allowed to delete or update the project `{{ request.object.metadata.name }}` because it is owned by `{{ request.object.metadata.labels."k8s.gisa.io/owner" }}`'
+
+            # CREATE/UPDATE is not allowed to be changed from X owned to gisa owned and not created to be gisa owned
+          - key: '{{ request.object.metadata.labels."k8s.gisa.io/owner" }}'
+            operator: AnyIn
+            value:
+              - "gisa"
+            message: 'You are not allowed to delete or update the project `{{ request.object.metadata.name }}` because it is owned by `{{ request.object.metadata.labels."k8s.gisa.io/owner" }}`'
+
+          - key: '{{ request.object.metadata.labels."k8s.gisa.io/owner" }}'
+            operator: Equals
+            value: ""
+            message: "`k8s.gisa.io/owner` is required and cannot be empty"
+

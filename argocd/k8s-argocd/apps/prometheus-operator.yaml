@@ -1,0 +1,26 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: "https://github.com/naivary/k8s-argocd"
+    targetRevision: HEAD
+    path: prometheus-operator
+    kustomize:
+      namespace: prometheus-system
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prometheus-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - Replace=true

@@ -1,0 +1,21 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: test-project
+  namespace: argocd
+  labels:
+    k8s.gisa.io/owner: "nogisa"
+spec:
+  sourceRepos:
+    - https://github.com/git67/k8s-argocd-bootstrap.git
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  syncWindows:
+    - kind: allow
+      schedule: "* * * * *"
+      duration: "1m"

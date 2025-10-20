@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  Corefile: |
+    .:53 {
+        errors {
+        }
+        health {
+            lameduck 5s
+        }
+        ready
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+          pods insecure
+          fallthrough in-addr.arpa ip6.arpa
+        }
+        prometheus :9153
+        forward . /etc/resolv.conf {
+          prefer_udp
+          max_concurrent 1000
+        }
+        cache 30
+
+        loop
+        reload
+        loadbalance
+
+        header {
+          response set ra
+        }
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+  name: coredns
+  namespace: kube-system
+  resourceVersion: "30661"
+  uid: 4465afd9-6ce8-48fc-891a-a007928c8285

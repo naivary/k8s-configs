@@ -1,0 +1,9 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: loki-ruler
+spec:
+  generateBucketName: loki-ruler
+  storageClassName: ceph-object-storage
+  additionalConfig:
+    bucketOwner: "loki"

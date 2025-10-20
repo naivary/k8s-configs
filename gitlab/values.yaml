@@ -1,0 +1,106 @@
+# Was wollen die damit verwalten? 
+# Welche Object storages werden benötigt?
+global:
+  # object storage
+  hosts:
+    domain: mh.com
+    externalIP: 192.168.56.100
+  minio:
+    enabled: false
+  appConfig:
+    object_store:
+      connection:
+        secret: gitlab-global-objectstore-config
+        key: config
+      enabled: true
+      proxy_download: false
+    artifacts:
+      bucket: gitlab-artifacts-viridium
+    backups: # required
+      bucket: gitlab-backup-viridium
+      tmpBucket: gitlab-tmp-viridium
+    ciSecureFiles:
+      bucket: gitlab-ci-secure-files-viridium
+      enabled: true
+    dependencyProxy: # required
+      bucket: gitlab-dependency-proxy-viridium
+      enabled: true
+    externalDiffs:
+      enabled: true
+      bucket: gitlab-mr-diffs-viridium
+    lfs:
+      bucket: gitlab-lfs-viridium
+    packages:
+      bucket: gitlab-packages-viridium
+    terraformState:
+      bucket: gitlab-terraform-state-viridium
+      enabled: true
+    uploads:
+      bucket: gitlab-uploads-viridium
+  pages:
+    enabled: true
+    objectStore:
+      enabled: true
+      bucket: gitlab-pages-viridium
+      connection:
+        secret: gitlab-pages-objectstore-config
+        key: config
+  registry:
+    bucket: gitlab-registry-viridium
+  shell:
+    authToken:
+      secret: gitlab-shell-secret
+      key: secret
+  gitaly:
+    enabled: false
+    authToken:
+      secret: gitaly-secret
+      key: token
+    external:
+    - name: default
+      hostname: 192.168.56.83
+    - name: storage1
+      hostname: 192.168.56.83
+    tls:
+      enabled: false
+  redis:
+    host: 192.168.56.82
+    port: 6379
+    database: 0
+    auth:
+      enabled: false
+  psql:
+    host: 192.168.56.81
+    password:
+      secret: gitlab-psql-password
+      key: password
+    port: 5432
+    main:
+      username: git
+    ci:
+      username: git
+postgresql:
+  install: false
+redis:
+  install: false
+registry:
+  storage:
+    secret: gitlab-registry-objectstore-config
+    key: config
+nginx-ingress:
+  enabled: false 
+certmanager:
+  installCRDs: false
+certmanager-issuer:
+  email: "test@gitlab.com"
+gitlab-runner:
+  install: false
+prometheus:
+  install: false
+gitlab:
+  sidekiq:
+    maxReplicas: 3
+  migrations:
+    enabled: true
+ingress:
+  class: nginx

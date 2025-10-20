@@ -1,0 +1,12 @@
+$ORIGIN grafana.com.
+$TTL 1h
+
+@ IN SOA ns.grafana.com. sayedmustafahussaini.outlook.de. (2020010510 1d 2h 4w 1h)
+
+; Nameservers
+@ IN NS ns.grafana.com.
+@ IN A 192.168.56.71
+
+
+; A Records
+*.grafana.com. IN A 192.168.56.100

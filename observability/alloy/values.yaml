@@ -1,0 +1,14 @@
+crds:
+  create: true
+
+alloy:
+  configMap:
+    # -- Create a new ConfigMap for the config file.
+    create: false
+    # -- Content to assign to the new ConfigMap.  This is passed into `tpl` allowing for templating from values.
+    content: ''
+
+    # -- Name of existing ConfigMap to use. Used when create is false.
+    name: alloy-config
+    # -- Key in ConfigMap to get config from.
+    key: config.alloy

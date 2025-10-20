@@ -1,0 +1,9 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: loki-chunks
+spec:
+  generateBucketName: loki-chunks
+  storageClassName: ceph-object-storage
+  additionalConfig:
+    bucketOwner: "loki"

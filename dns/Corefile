@@ -1,0 +1,41 @@
+.:53 {
+    forward . 8.8.8.8 9.9.9.9
+    log
+    errors
+}
+
+mh.com:53 {
+    file /root/db.mh
+    log
+    errors
+}
+
+grafana.com:53 {
+    file /root/db.grafana
+    log
+    errors
+}
+
+webinar.com:53 {
+    file /root/db.webinar
+    log
+    errors
+}
+
+loki.com:53 {
+    file /root/db.loki
+    log
+    errors
+}
+
+alloy.com:53 {
+    file /root/db.alloy
+    log
+    errors
+}
+
+energycorp.com:53 {
+    file /root/db.capsule
+    log
+    errors
+}

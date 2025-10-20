@@ -1,0 +1,70 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  serviceAccountName: prometheus
+  replicas: 1
+  logFormat: logfmt
+  retention: 6h
+  scrapeInterval: 15s
+  enableFeatures:
+    - exemplar-storage
+    - agent
+  serviceMonitorSelector:
+    matchLabels:
+      serviceMonitorSelector: prometheus
+  tsdb:
+    # out of order error of cadvisor
+    # see: https://github.com/prometheus/prometheus/issues/14973 
+    outOfOrderTimeWindow: 1s
+  remoteWrite:
+    - url: http://receiver-write.monitoring.svc.cluster.local:10908/api/v1/receive
+  storage:
+    volumeClaimTemplate:
+      spec:
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - name: web
+    port: 9090
+    protocol: TCP
+    targetPort: web
+  selector:
+    prometheus: prometheus
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-dashboard
+  namespace: monitoring
+  annotations:
+    cert-manager.io/ClusterIssuer: "self-signed"
+spec:
+  ingressClassName: "nginx"
+  tls:
+  - hosts:
+      - prometheus.mh.com 
+    secretName: prometheus-dashboard-tls
+  rules:
+  - host: prometheus.mh.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus
+            port:
+              name: web
+

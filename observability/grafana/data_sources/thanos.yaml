@@ -1,0 +1,19 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: thanos
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboard: "grafana"
+  datasource:
+    name: thanos
+    type: prometheus
+    uid: "thanos"
+    access: proxy
+    url: http://querier.monitoring.svc.cluster.local:9090
+    isDefault: true
+    jsonData:
+      "tlsSkipVerify": true
+      "timeInterval": "5s"

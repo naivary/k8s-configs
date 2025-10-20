@@ -1,0 +1,25 @@
+storage:
+  trace:
+    backend: s3
+    s3:
+      access_key: ${S3_ACCESS_KEY}
+      secret_key: ${S3_SECRET_KEY}
+      bucket: ${TEMPO_BUCKET_NAME}
+      endpoint: ${S3_ENDPOINT}
+      insecure: true
+# Specifies which trace protocols to accept by the gateway.
+traces:
+  otlp:
+    grpc:
+      enabled: true
+    http:
+      enabled: true
+  # jaeger:
+  #   thriftHttp:
+  #     enabled: false
+distributor:
+  config:
+    log_received_spans:
+      enabled: true
+    log_discarded_spans:
+      enabled: true

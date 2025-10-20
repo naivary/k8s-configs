@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: no-kube-destination
+spec:
+  background: false
+  rules:
+  - name: no-kube-destination
+    match:
+      any:
+      - resources:
+          kinds:
+          - AppProject
+    validate:
+      failureAction: Enforce
+      message: "Any kind of destination to a `kube-*` namespace is not allowed in a AppProject."
+      foreach:
+      - list: request.object.spec.destinations
+        deny:
+          conditions:
+            any:
+            - key: "{{ element.namespace }}"
+              operator: Equals
+              value: "kube-*"

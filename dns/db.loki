@@ -1,0 +1,12 @@
+$ORIGIN loki.com.
+$TTL 1h
+
+@ IN SOA ns.loki.com. sayedmustafahussaini.outlook.de. (2020010510 1d 2h 4w 1h)
+
+; Nameservers
+@ IN NS ns.loki.com.
+@ IN A 192.168.56.71
+
+
+; A Records
+*.loki.com. IN A 192.168.56.100

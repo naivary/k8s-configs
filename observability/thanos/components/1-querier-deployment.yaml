@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: monitoring
+  name: querier
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: querier
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: querier
+    spec:
+      serviceAccount: thanos
+      securityContext:
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+        - name: querier
+          image: docker.io/bitnami/thanos:0.38.0
+          args:
+            - query
+            - --log.level=info
+            - --endpoint.info-timeout=30s
+            - --grpc-address=0.0.0.0:10901
+            - --http-address=0.0.0.0:10902
+            - --query.replica-label=prometheus_replica
+            - --store.sd-files=/conf/sd-file.json
+            - --store.sd-interval=1m
+            # - --endpoint=storegateway.monitoring.svc.cluster.local:10901
+            # - --endpoint=receiver-store-1.monitoring.svc.cluster.local:10907
+            # - --endpoint=receiver-store-2.monitoring.svc.cluster.local:10907
+          ports:
+            - name: http
+              containerPort: 10902
+              protocol: TCP
+            - name: grpc
+              containerPort: 10901
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /-/healthy
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 30
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /-/ready
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 2Gi
+          volumeMounts:
+            - name: thanos-file-sd
+              mountPath: /conf/sd-file.json
+              readOnly: true
+              subPath: sd-file.json
+      volumes:
+        - name: thanos-file-sd
+          configMap:
+            name: thanos-file-sd

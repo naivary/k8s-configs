@@ -1,0 +1,28 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-namespaces
+  annotations:
+    kyverno.io/kubernetes-version: "1.22-1.32"
+spec:
+  validationFailureAction: Enforce
+  rules:
+  - name: no-kube-ns
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    preconditions:
+      all:
+      - key: "{{ request.object.metadata.namespace || '' }}"
+        operator: NotEquals
+        value: ""
+    validate:
+      message: "Using 'kube-*' namespace is not allowed"
+      deny:
+        conditions:
+          any:
+          - key: "{{ request.object.metadata.namespace }}"
+            operator: Equals
+            value: "kube-*"

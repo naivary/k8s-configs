@@ -1,0 +1,19 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: default
+  namespace: argocd
+spec:
+  sourceRepos:
+    - "*"
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  destinationServiceAccounts:
+    - server: https://kubernetes.default.svc # catch-all configuration
+      namespace: '*'
+      defaultServiceAccount: "argocd:argocd-application-controller"
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: etcd
+  namespace: monitoring
+  labels:
+    serviceMonitorSelector: prometheus
+spec:
+  selector:
+    matchLabels:
+      k8s-app: etcd
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  endpoints:
+  - port: etcd
+    scheme: https
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    tlsConfig:
+      ca:
+        secret:
+          key: ca.crt
+          name: etcd-tls
+      cert:
+        secret:
+          key: tls.crt
+          name: etcd-tls
+      keySecret:
+        key: tls.key
+        name: etcd-tls
+    path: /metrics

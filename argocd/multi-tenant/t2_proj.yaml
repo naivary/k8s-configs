@@ -1,0 +1,21 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: t2.default
+  namespace: argocd
+spec:
+  sourceNamespaces:
+    - t2-argocd
+  sourceRepos:
+    - '*'
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  destinationServiceAccounts:
+    - namespace: 't2-*'
+      server: https://kubernetes.default.svc
+      defaultServiceAccount: "t2-argocd:argocd-manager"
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

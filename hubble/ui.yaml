@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hubble
+  namespace: kube-system
+  annotations:
+    cert-manager.io/cluster-issuer: "self-signed"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - hubble.mh.com
+    secretName: hubble-ca
+  rules:
+  - host: hubble.mh.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hubble-ui
+            port:
+              number: 80
+---
+

@@ -1,0 +1,13 @@
+kind: GrafanaContactPoint
+apiVersion: grafana.integreatly.org/v1beta1
+metadata:
+  name: operations-team
+  namespace: monitoring
+spec:
+  name: operations-team
+  type: "email"
+  instanceSelector:
+    matchLabels:
+      dashboard: "grafana"
+  settings:
+    addresses: 'mustafa.hussaini@etomer.com'

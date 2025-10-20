@@ -1,0 +1,16 @@
+apiVersion: cilium.io/v2
+kind: CiliumEgressGatewayPolicy
+metadata:
+  name: nodelocaldns
+spec:
+  selectors:
+  - podSelector:
+      matchLabels:
+        io.kubernetes.pod.namespace: cilium-eg-gw
+  destinationCIDRs:
+  - "169.254.25.10/32"
+  egressGateway:
+    nodeSelector:
+      matchLabels:
+        egress: cilium
+    interface: nodelocaldns

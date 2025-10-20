@@ -1,0 +1,11 @@
+plugins:
+  - name: ai-assistant
+    source: https://artifacthub.io/packages/headlamp/headlamp-plugins/headlamp_ai_assistant
+    version: 0.1.0-alpha
+    # Optional: specify dependencies if needed
+    #dependencies:
+      #- another-plugin
+
+installOptions:
+  parallel: true
+  maxConcurrent: 2

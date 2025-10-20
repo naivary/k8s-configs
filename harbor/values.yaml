@@ -1,0 +1,62 @@
+expose:
+  type: ingress    # Type is ingress to expose via Ingress controller
+  tls:
+    enabled: true  # Enable TLS
+    certSource: auto  # TLS certificate source
+  ingress:
+    className: nginx
+    hosts:
+      core: harbor.mh.com      # Harbor core service domain
+    controller: default        # The ingress controller to be used
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: "self-signed"
+    tls:
+      - hosts:
+          - harbor.mh.com
+
+# External URL configuration
+externalURL: https://harbor.mh.com  # Set the external URL to match the core ingress host
+
+# Trivy vulnerability scanner enabled
+trivy:
+  enabled: true
+
+# Persistence settings
+persistence:
+  enabled: true
+  persistentVolumeClaim:
+    registry:
+      storageClass: nfs
+      size: 10Gi
+    redis:
+      storageClass: nfs
+    trivy:
+      storageClass: nfs
+    jobservice:
+      jobLog:
+        storageClass: nfs
+
+
+database:
+  type: external
+  external:
+    host: 192.168.56.101
+    port: "5432"
+    username: "harbor"
+    password: "harbor" 
+    coreDatabase: "registry"
+
+
+# Log level
+logLevel: info
+
+# Service Account for Harbor
+serviceAccount:
+  create: true
+
+core:
+  replicas: 1
+
+portal:
+  replicas: 1

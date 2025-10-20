@@ -1,0 +1,16 @@
+apiVersion: cilium.io/v2
+kind: CiliumEgressGatewayPolicy
+metadata:
+  name: internal02
+spec:
+  selectors:
+  - podSelector:
+      matchLabels:
+        io.kubernetes.pod.namespace: customer-02
+  destinationCIDRs:
+  - "0.0.0.0/0"
+  egressGateway:
+    nodeSelector:
+      matchLabels:
+        egress: cilium
+    interface: internal02 

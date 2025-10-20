@@ -1,0 +1,45 @@
+replicaCount: 3
+config:
+  inCluster: true
+  pluginsDir: "/headlamp/plugins"
+  watchPlugins: true
+
+env:
+  - name: HEADLAMP_CONFIG_TRACING_ENABLED
+    value: "false"
+  - name: HEADLAMP_CONFIG_METRICS_ENABLED
+    value: "true"
+  - name: HEADLAMP_CONFIG_SERVICE_NAME
+    value: "headlamp"
+  - name: HEADLAMP_CONFIG_SERVICE_VERSION
+    value: "latest"
+
+serviceAccount:
+  create: true
+  name: "admin"
+
+clusterRoleBinding:
+  create: true
+  clusterRoleName: cluster-admin
+
+ingress:
+  enabled: true
+  annotations:
+    "cert-manager.io/cluster-issuer": "self-signed"
+  ingressClassName: "nginx"
+  hosts:
+    - host: headlamp.mh.com
+      paths:
+      - path: /
+        type: ImplementationSpecific
+  tls:
+    - secretName: headlamp-tls
+      hosts:
+        - headlamp.mh.com
+
+pluginsManager:
+  enabled: true
+  configContent: ""
+  baseImage: node:lts-alpine
+  version: latest
+

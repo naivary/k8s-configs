@@ -4,6 +4,9 @@ metadata:
   name: gitlab
   namespace: argocd
 spec:
+  syncPolicy:
+    automated:
+      enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: gitlab
@@ -13,6 +16,9 @@ spec:
     chart: gitlab
     targetRevision: 9.5.0
     helm:
+      parameters:
+        - name: "upgradeCheck.enabled"
+          value: "false"
       valueFiles:
       - $values/gitlab/values.yaml
   - repoURL: 'https://github.com/naivary/k8s-configs.git'

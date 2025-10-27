@@ -1,0 +1,21 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: loki
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboard: "grafana"
+  uid: "loki_from_operator"
+  datasource:
+    name: loki
+    type: loki
+    access: proxy
+    url: http://loki-gateway.monitoring.svc.cluster.local
+    jsonData:
+      tlsSkipVerify: "true"
+      timeInterval: "5s"
+      httpHeaderName1: "X-Scope-OrgId"
+    secureJsonData:
+      httpHeaderValue1: "1"

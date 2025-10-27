@@ -11,7 +11,7 @@ loki:
     digest: null
     pullPolicy: IfNotPresent
   storage:
-    use_thanos_objstore: true
+    use_thanos_objstore: false
     type: s3
     s3:
       region: ${S3_REGION}
@@ -19,7 +19,7 @@ loki:
       secretAccessKey: ${S3_SECRET_KEY}
       accessKeyId: ${S3_ACCESS_KEY}
       s3ForcePathStyle: true
-      insecure: true
+      insecure: false
     bucketNames:
       chunks: ${LOKI_CHUNKS_BUCKET_NAME}
       ruler: ${LOKI_RULER_BUCKET_NAME}
@@ -27,7 +27,7 @@ loki:
     object_store:
       type: s3
       s3:
-        region: eu-central-1
+        region: ${S3_REGION}
         endpoint: ${S3_ENDPOINT}
         secretAccessKey: ${S3_SECRET_KEY}
         accessKeyId: ${S3_ACCESS_KEY}

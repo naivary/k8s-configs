@@ -1,0 +1,36 @@
+# Was wollen die damit verwalten? 
+# Welche Object storages werden benötigt?
+global:
+  # object storage
+  hosts:
+    domain: mh.com
+    externalIP: 192.168.56.100
+  minio:
+    enabled: true
+  shell:
+    authToken:
+      secret: gitlab-shell-secret
+      key: secret
+  gitaly:
+    enabled: true
+postgresql:
+  install: true
+redis:
+  install: true
+nginx-ingress:
+  enabled: false 
+certmanager:
+  installCRDs: false
+certmanager-issuer:
+  email: "test@gitlab.com"
+gitlab-runner:
+  install: false
+prometheus:
+  install: false
+gitlab:
+  sidekiq:
+    maxReplicas: 3
+  migrations:
+    enabled: true
+ingress:
+  class: nginx

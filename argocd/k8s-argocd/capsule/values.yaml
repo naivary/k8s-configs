@@ -1,4 +1,0 @@
-manager:
-  options:
-    capsuleUserGroups: ["projectcapsule.dev", "system:serviceaccounts:argocd"]
-    forceTenantPrefix: true

@@ -7,15 +7,14 @@ spec:
   instanceSelector:
     matchLabels:
       dashboard: "grafana"
-  uid: "loki_from_operator"
+  uid: loki
   datasource:
-    name: loki
+    name: Loki
     type: loki
     access: proxy
     url: http://loki-gateway.monitoring.svc.cluster.local
+    isDefault: true
     jsonData:
-      tlsSkipVerify: "true"
-      timeInterval: "5s"
-      httpHeaderName1: "X-Scope-OrgId"
+      httpHeaderName1: "X-Scope-OrgID"
     secureJsonData:
       httpHeaderValue1: "1"

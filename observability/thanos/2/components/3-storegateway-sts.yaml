@@ -36,7 +36,7 @@ spec:
               mountPath: /data
       containers:
         - name: storegateway
-          image: docker.io/bitnami/thanos:latest
+          image: quay.io/thanos/thanos
           securityContext:
             runAsUser: 1001
           args:

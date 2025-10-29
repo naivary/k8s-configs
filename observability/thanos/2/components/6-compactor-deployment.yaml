@@ -35,7 +35,7 @@ spec:
               mountPath: /data
       containers:
         - name: compactor
-          image: docker.io/bitnami/thanos:latest
+          image: quay.io/thanos/thanos
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 1001

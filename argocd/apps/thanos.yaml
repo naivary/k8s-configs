@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prometheus-operator
+  name: thanos
   namespace: argocd
 spec:
   project: default
@@ -18,6 +18,5 @@ spec:
   sources:
   - repoURL: 'https://github.com/naivary/k8s-configs.git'
     targetRevision: HEAD
-    path: argocd/apps/prometheus-operator
-    kustomize:
-      namespace: monitoring
+    path: observability/thanos/2
+    recursive: true

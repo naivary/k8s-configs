@@ -13,7 +13,7 @@ spec:
     namespace: monitoring
   sources:
   - repoURL: https://grafana.github.io/helm-charts
-    chart: grafana/grafana
+    chart: grafana/grafana-operator
     targetRevision: 10.1.2
     helm:
       valueFiles:

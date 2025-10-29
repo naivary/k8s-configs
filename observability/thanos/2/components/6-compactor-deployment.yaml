@@ -35,7 +35,7 @@ spec:
               mountPath: /data
       containers:
         - name: compactor
-          image: quay.io/thanos/thanos
+          image: quay.io/thanos/thanos:v0.40.1
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 1001

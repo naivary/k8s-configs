@@ -36,7 +36,7 @@ spec:
               mountPath: /data
       containers:
         - name: storegateway
-          image: quay.io/thanos/thanos
+          image: quay.io/thanos/thanos:v0.40.1
           securityContext:
             runAsUser: 1001
           args:

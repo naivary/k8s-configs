@@ -22,7 +22,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: querier
-          image: quay.io/thanos/thanos
+          image: quay.io/thanos/thanos:v0.40.1
           args:
             - query
             - --log.level=info

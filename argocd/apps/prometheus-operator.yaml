@@ -17,6 +17,6 @@ spec:
   sources:
   - repoURL: 'https://github.com/naivary/k8s-configs.git'
     targetRevision: HEAD
-    path: prometheus-operator
+    path: argocd/apps/prometheus-operator
     kustomize:
       namespace: monitoring

@@ -12,4 +12,3 @@ stringData:
       secret_key: ${S3_SECRET_KEY}
       bucket: ${THANOS_BUCKET_NAME}
       region: ${S3_REGION}
-      insecure: true

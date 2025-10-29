@@ -3,30 +3,30 @@ kind: ServiceAccount
 metadata:
   name: prometheus-agent
   namespace: monitoring
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: prometheus-agent
-  namespace: monitoring
-rules:
-- apiGroups: [""]
-  resources:
-  - services
-  - endpoints
-  - pods
-  verbs: ["get", "list", "watch"]
-- apiGroups: [""]
-  resources:
-  - configmaps
-  verbs: ["get"]
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses
-  verbs: ["get", "list", "watch"]
-- nonResourceURLs: ["/metrics"]
-  verbs: ["get"]
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRole
+# metadata:
+#   name: prometheus-agent
+#   namespace: monitoring
+# rules:
+# - apiGroups: [""]
+#   resources:
+#   - services
+#   - endpoints
+#   - pods
+#   verbs: ["get", "list", "watch"]
+# - apiGroups: [""]
+#   resources:
+#   - configmaps
+#   verbs: ["get"]
+# - apiGroups:
+#   - networking.k8s.io
+#   resources:
+#   - ingresses
+#   verbs: ["get", "list", "watch"]
+# - nonResourceURLs: ["/metrics"]
+#   verbs: ["get"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -35,7 +35,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: prometheus-agent
+  name: cluster-admin
 subjects:
 - kind: ServiceAccount
   name: prometheus-agent

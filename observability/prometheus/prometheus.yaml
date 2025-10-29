@@ -1,3 +1,23 @@
+# https://github.com/prometheus-operator/prometheus-operator/issues/3941 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: monitoring
+---
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
@@ -11,7 +31,6 @@ spec:
   scrapeInterval: 15s
   enableFeatures:
     - exemplar-storage
-    - agent
   serviceMonitorSelector:
     matchLabels:
       serviceMonitorSelector: prometheus

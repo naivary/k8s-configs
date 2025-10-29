@@ -22,7 +22,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: querier
-          image: docker.io/bitnami/thanos:0.38.0
+          image: docker.io/bitnami/thanos:latest
           args:
             - query
             - --log.level=info

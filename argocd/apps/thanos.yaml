@@ -19,4 +19,5 @@ spec:
   - repoURL: 'https://github.com/naivary/k8s-configs.git'
     targetRevision: HEAD
     path: observability/thanos/2
-    recursive: true
+    directory:
+      recurse: true

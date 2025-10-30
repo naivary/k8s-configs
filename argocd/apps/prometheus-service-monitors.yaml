@@ -1,25 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: loki
+  name: prometheus-service-monitors
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   syncPolicy:
     automated:
-      enabled: true
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
   sources:
-  - repoURL: https://grafana.github.io/helm-charts
-    chart: grafana/loki
-    targetRevision: 6.43.0
-    helm:
-      valueFiles:
-      - $values/loki/values.yaml
   - repoURL: 'https://github.com/naivary/k8s-configs.git'
-    targetRevision: main
-    ref: values
+    targetRevision: HEAD
+    path: observability/prometheus
+    directory:
+      recurse: true

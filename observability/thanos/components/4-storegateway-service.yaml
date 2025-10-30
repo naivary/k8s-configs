@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: storegateway
   namespace: monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   type: ClusterIP
   ports:

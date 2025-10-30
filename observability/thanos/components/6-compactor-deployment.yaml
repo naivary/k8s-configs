@@ -1,21 +1,22 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
+  name: compactor
   namespace: monitoring
-  name: storegateway
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: 1
-  serviceName: storegateway
-  updateStrategy:
-    type: RollingUpdate
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: storegateway
+      app.kubernetes.io/name: compactor
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: storegateway
+        app.kubernetes.io/name: compactor
     spec:
       serviceAccount: thanos
       securityContext:
@@ -35,24 +36,25 @@ spec:
             - name: data
               mountPath: /data
       containers:
-        - name: storegateway
+        - name: compactor
           image: quay.io/thanos/thanos:v0.40.1
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 1001
           args:
-            - store
-            - --chunk-pool-size=2GB
-            - --log.level=debug
-            - --grpc-address=0.0.0.0:10901
+            - compact
+            - --log.level=info
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
+            - --retention.resolution-raw=7d
+            - --retention.resolution-5m=30d
+            - --retention.resolution-1h=180d
+            - --consistency-delay=30m
             - --objstore.config-file=/conf/objstore.yml
+            - --wait
           ports:
             - name: http
               containerPort: 10902
-              protocol: TCP
-            - name: grpc
-              containerPort: 10901
               protocol: TCP
           livenessProbe:
             failureThreshold: 6
@@ -78,7 +80,7 @@ spec:
               memory: 256Mi
             limits:
               cpu: 500m
-              memory: 1Gi
+              memory: 256Mi
           volumeMounts:
             - name: objstore
               mountPath: /conf/objstore.yml
@@ -89,11 +91,6 @@ spec:
         - name: objstore
           secret:
             secretName: objstore
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes: [ReadWriteOnce]
-        resources:
-          requests:
-            storage: 5Gi
+        - name: data
+          persistentVolumeClaim:
+            claimName: compactor

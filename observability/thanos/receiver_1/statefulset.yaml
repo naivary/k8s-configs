@@ -4,6 +4,8 @@ kind: StatefulSet
 metadata:
   name: receiver-1
   namespace: monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: 1
   serviceName: receiver

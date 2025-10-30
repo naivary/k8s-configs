@@ -4,6 +4,8 @@ kind: Secret
 metadata:
   name: hashring
   namespace: monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 stringData:
   hashring.json: |-
     [

@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   namespace: monitoring
   name: objstore
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 stringData:
   objstore.yml: |-
     type: S3

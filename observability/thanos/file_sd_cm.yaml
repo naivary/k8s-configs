@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: thanos-file-sd
   namespace: monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 data:
   sd-file.json: |-
     [
